@@ -1,17 +1,18 @@
 package br.com.syd.marvelcharacters
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.recyclerview.widget.*
-
-import com.google.android.material.tabs.TabLayout
-import android.content.Intent
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.util.IcallDetail
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -24,7 +25,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [AllCharactersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AllCharactersFragment : Fragment() {
+class AllCharactersFragment : Fragment(), IcallDetail {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -74,7 +75,7 @@ class AllCharactersFragment : Fragment() {
         //val layoutManager = LinearLayoutManager(this.activity,  LinearLayoutManager.HORIZONTAL, false)
         //val layoutManager = GridLayoutManager(this.activity,  2)
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val mAdapter = LineAdapter(arrayList, layoutManager)
+        val mAdapter = LineAdapter(arrayList, this, layoutManager)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = mAdapter
 
@@ -83,18 +84,19 @@ class AllCharactersFragment : Fragment() {
         )
 
         btnChange.setOnClickListener {
-                    if (layoutManager.spanCount == 1) {
-                        layoutManager.spanCount = 2
-                        btnChange.text = "list"
-                    } else {
-                        layoutManager.spanCount = 1
-                        btnChange.text = "grid"
-                    }
+            if (layoutManager.spanCount == 1) {
+                layoutManager.spanCount = 2
+                btnChange.text = "list"
+            } else {
+                layoutManager.spanCount = 1
+                btnChange.text = "grid"
+            }
             mAdapter.notifyItemRangeChanged(0, mAdapter.itemCount ?: 0)
         }
 
-        btnOpen.setOnClickListener{
-            val characterModel = CharacterModel(1,"", "", "",ArrayList<String>(),ArrayList<String>(), false)
+        btnOpen.setOnClickListener {
+            val characterModel =
+                CharacterModel(1, "", "", "", ArrayList<String>(), ArrayList<String>(), false)
             val intent = Intent(this.activity, CharacterDetailActivity::class.java)
             intent.putExtra("name_of_extra", characterModel)
             startActivity(intent)
@@ -123,22 +125,20 @@ class AllCharactersFragment : Fragment() {
             //val layoutManager = LinearLayoutManager(this.activity,  LinearLayoutManager.HORIZONTAL, false)
             //val layoutManager = GridLayoutManager(this.activity,  2)
             val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            val mAdapter = LineAdapter(arrayList, layoutManager)
+            val mAdapter = LineAdapter(arrayList, this, layoutManager)
             mRecyclerView.layoutManager = layoutManager
             mRecyclerView.adapter = mAdapter
             swipeContainer.isRefreshing = false
         }
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeContainer.setColorSchemeResources(
+            android.R.color.holo_blue_bright,
             android.R.color.holo_green_light,
             android.R.color.holo_orange_light,
-            android.R.color.holo_red_light);
+            android.R.color.holo_red_light
+        );
 
     }
 
-    private fun setupRecycler() {
-
-
-    }
 
     companion object {
         /**
@@ -158,5 +158,11 @@ class AllCharactersFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun callDetail(characterModel: CharacterModel) {
+        val intent = Intent(this.activity, CharacterDetailActivity::class.java)
+        intent.putExtra("name_of_extra", characterModel)
+        startActivity(intent)
     }
 }
