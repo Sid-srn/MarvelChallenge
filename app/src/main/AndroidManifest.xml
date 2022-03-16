@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.syd.marvelcharacters">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".CustomApplication"
         android:allowBackup="true"
@@ -14,7 +14,7 @@
             android:name=".CharacterDetailActivity"
             android:exported="true"
             android:label="@string/title_activity_character_detail"
-            android:theme="@style/Theme.MarvelCharacters.NoActionBar" />
+            android:theme="@style/Theme.MarvelCharacters" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

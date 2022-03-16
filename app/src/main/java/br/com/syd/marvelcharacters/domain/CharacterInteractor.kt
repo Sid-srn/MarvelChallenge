@@ -4,13 +4,13 @@ import br.com.syd.marvelcharacters.data.CharacterRepository
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 
 interface CharacterInteractor {
-    fun getCharacter(): List<CharacterModel>
+    suspend fun getCharacter(): List<CharacterModel>
 }
 
 class CharacterInteractorImpl(
     private val repository: CharacterRepository,
     private val mapper: CharacterMapper
 ) : CharacterInteractor {
-    override fun getCharacter()  =
+    override suspend fun getCharacter()  =
         mapper.toCharacter(repository.getCharacter())
 }

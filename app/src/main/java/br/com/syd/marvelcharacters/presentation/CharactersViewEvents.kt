@@ -4,7 +4,6 @@ import br.com.syd.marvelcharacters.domain.model.CharacterModel
 
 sealed class CharactersViewEvents {
     class NotifyGetCharactersSuccess(val characters: List<CharacterModel>) : CharactersViewEvents()
-    class NotifyGetCharactersException(ex: Exception) : CharactersViewEvents() {
-
-    }
+    class NotifyGetCharactersException(ex: Exception) : CharactersViewEvents()
+    class NotifyReloadCharactersSuccess(val characters: List<CharacterModel>) : CharactersViewEvents()
 }

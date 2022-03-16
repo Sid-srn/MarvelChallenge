@@ -5,14 +5,15 @@ import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import retrofit2.Response
 
 interface CharacterMapper {
-    fun toCharacter(characterResponse: Response<CharacterResponse>): List<CharacterModel>
+    fun toCharacter(characterResponse: Any): List<CharacterModel>
 }
 
 class CharacterMapperImpl() : CharacterMapper {
-    override fun toCharacter(characterResponse: Response<CharacterResponse>): List<CharacterModel> {
+    override fun toCharacter(characterResponse: Any): List<CharacterModel> {
         val characters = ArrayList<CharacterModel>()
-        characterResponse.body()?.let {
-            for (character in it.data.results) {
+        //characterResponse.body()?.let {
+        val response : CharacterResponse = characterResponse as CharacterResponse
+            for (character in characterResponse.data.results) {
                 characters.add(
                     CharacterModel(
                         id = character.id,
@@ -25,7 +26,7 @@ class CharacterMapperImpl() : CharacterMapper {
                     )
                 )
             }
-        }
+        //}
 
         return characters
     }

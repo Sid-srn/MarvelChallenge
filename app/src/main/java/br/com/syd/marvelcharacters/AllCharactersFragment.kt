@@ -5,159 +5,104 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.presentation.CharacterViewModel
+import br.com.syd.marvelcharacters.presentation.CharactersViewEvents
 import br.com.syd.marvelcharacters.util.IcallDetail
+import org.koin.android.viewmodel.ext.android.viewModel
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AllCharactersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AllCharactersFragment : Fragment(), IcallDetail {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    //private val binding: FragmentAllCharactersBinding by lazy {
+    //    FragmentAllCharactersBinding.inflate(layoutInflater)
+    //}
+    private lateinit var binding: FragmentAllCharactersBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val characterAdapter: LineAdapter by lazy {
+        LineAdapter()
     }
+
+    private lateinit var lManager: StaggeredGridLayoutManager
+
+    private val characterViewModel: CharacterViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_all_characters, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAllCharactersBinding.bind(view)
+        lManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        setupView()
+    }
 
-        val mRecyclerView = view.findViewById<RecyclerView>(R.id.character_recycler_view)
-        val btnChange = view.findViewById<Button>(R.id.appCompatButton)
-        val btnOpen = view.findViewById<Button>(R.id.openBtn)
-        val swipeContainer = view.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+    private fun setupView() {
+        setupRecyclewView()
+        setListeners()
+        setupObservers()
+    }
 
-        val arrayList = ArrayList<String>()//Creating an empty arraylist
-        arrayList.add("Ajay")//Adding object in arraylist
-        arrayList.add("Vijay")
-        arrayList.add("Prakash")
-        arrayList.add("Rohan")
-        arrayList.add("Vijay")
-        arrayList.add("Ajay")//Adding object in arraylist
-        arrayList.add("Vijay")
-        arrayList.add("Prakash")
-        arrayList.add("Rohan")
-        arrayList.add("Vijay")
-        arrayList.add("Ajay")//Adding object in arraylist
-        arrayList.add("Vijay")
-        arrayList.add("Prakash")
-        arrayList.add("Rohan")
-        arrayList.add("Vijay")
-
-
-        //val layoutManager = LinearLayoutManager(this.activity,  LinearLayoutManager.HORIZONTAL, false)
-        //val layoutManager = GridLayoutManager(this.activity,  2)
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val mAdapter = LineAdapter(arrayList, this, layoutManager)
-        mRecyclerView.layoutManager = layoutManager
-        mRecyclerView.adapter = mAdapter
-
-        mRecyclerView.addItemDecoration(
-            DividerItemDecoration(this.activity, DividerItemDecoration.VERTICAL)
+    private fun setupObservers() {
+        characterViewModel.charactersListOb.observe(
+            viewLifecycleOwner,
+            Observer(::handleCharacters)
         )
-
-        btnChange.setOnClickListener {
-            if (layoutManager.spanCount == 1) {
-                layoutManager.spanCount = 2
-                btnChange.text = "list"
-            } else {
-                layoutManager.spanCount = 1
-                btnChange.text = "grid"
+        characterViewModel.viewState.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is CharactersViewEvents.NotifyReloadCharactersSuccess -> handleReloadedCharacters(it.characters)
             }
-            mAdapter.notifyItemRangeChanged(0, mAdapter.itemCount ?: 0)
+        })
+    }
+
+    private fun handleCharacters(charactersList: List<CharacterModel>) {
+        characterAdapter.setList(charactersList)
+    }
+
+    private fun handleReloadedCharacters(charactersList: List<CharacterModel>) {
+        characterAdapter.setList(charactersList)
+        binding.swipeContainer.isRefreshing = false
+    }
+
+    private fun setupRecyclewView() {
+        characterAdapter.setCallDetail(this)
+        characterAdapter.setLayoutManager(lManager)
+        binding.characterRecyclerView.apply {
+            layoutManager =
+                lManager//StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            adapter = characterAdapter
         }
+    }
 
-        btnOpen.setOnClickListener {
-            val characterModel =
-                CharacterModel(1, "", "", "", ArrayList<String>(), ArrayList<String>(), false)
-            val intent = Intent(this.activity, CharacterDetailActivity::class.java)
-            intent.putExtra("name_of_extra", characterModel)
-            startActivity(intent)
+    private fun setListeners() {
+        binding.swipeContainer.setOnRefreshListener {
+            characterViewModel.reloadCharacters()
+
         }
-
-        swipeContainer.setOnRefreshListener {
-
-            val arrayList = ArrayList<String>()//Creating an empty arraylist
-            arrayList.add("Updated - Ajay")//Adding object in arraylist
-            arrayList.add("Updated - Vijay")
-            arrayList.add("Updated - Prakash")
-            arrayList.add("Updated - Rohan")
-            arrayList.add("Updated - Vijay")
-            arrayList.add("Updated - Ajay")//Adding object in arraylist
-            arrayList.add("Updated - Vijay")
-            arrayList.add("Updated - Prakash")
-            arrayList.add("Updated - Rohan")
-            arrayList.add("Updated - Vijay")
-            arrayList.add("Updated - Ajay")//Adding object in arraylist
-            arrayList.add("Updated - Vijay")
-            arrayList.add("Updated - Prakash")
-            arrayList.add("Updated - Rohan")
-            arrayList.add("Updated - Vijay")
-
-
-            //val layoutManager = LinearLayoutManager(this.activity,  LinearLayoutManager.HORIZONTAL, false)
-            //val layoutManager = GridLayoutManager(this.activity,  2)
-            val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            val mAdapter = LineAdapter(arrayList, this, layoutManager)
-            mRecyclerView.layoutManager = layoutManager
-            mRecyclerView.adapter = mAdapter
-            swipeContainer.isRefreshing = false
-        }
-        swipeContainer.setColorSchemeResources(
+        binding.swipeContainer.setColorSchemeResources(
             android.R.color.holo_blue_bright,
             android.R.color.holo_green_light,
             android.R.color.holo_orange_light,
             android.R.color.holo_red_light
-        );
+        )
 
-    }
+        binding.changeListBtn.setOnClickListener {
 
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AllCharactersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AllCharactersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+            if (lManager.spanCount == 1) {
+                lManager.spanCount = 2
+                binding.changeListBtn.text = "list"
+            } else {
+                lManager.spanCount = 1
+                binding.changeListBtn.text = "grid"
             }
+            characterAdapter.notifyItemRangeChanged(0, characterAdapter.itemCount ?: 0)
+        }
     }
 
     override fun callDetail(characterModel: CharacterModel) {
