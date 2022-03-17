@@ -1,6 +1,5 @@
 package br.com.syd.marvelcharacters.presentation
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,13 +11,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
-import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.lang.reflect.Type
 
 
 class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
@@ -120,15 +115,13 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     override fun saveFavorite(characterModel: CharacterModel) {
         characterViewModel.saveFavorite(
-            FavoriteCharacterModel(
-                characterModel.id,
-                characterModel.name,
-                characterModel.picture
-            )
+            characterModel
         )
     }
 
     override fun deleteFavorite(characterModel: CharacterModel) {
-        TODO("Not yet implemented")
+        characterViewModel.removeFavorite(
+            characterModel
+        )
     }
 }

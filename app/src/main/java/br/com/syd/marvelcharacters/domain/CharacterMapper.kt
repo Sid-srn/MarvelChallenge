@@ -2,33 +2,61 @@ package br.com.syd.marvelcharacters.domain
 
 import br.com.syd.marvelcharacters.data.model.CharacterResponse
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
-import retrofit2.Response
+import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
 
 interface CharacterMapper {
-    fun toCharacter(characterResponse: Any): List<CharacterModel>
+    fun reponseToCharacter(characterResponse: CharacterResponse): List<CharacterModel>
+    fun favoriteToCharacter(characterResponse: List<FavoriteCharacterModel>): List<CharacterModel>
+    fun toFavorite(characterModel: CharacterModel): FavoriteCharacterModel
 }
 
 class CharacterMapperImpl() : CharacterMapper {
-    override fun toCharacter(characterResponse: Any): List<CharacterModel> {
+    override fun reponseToCharacter(characterResponse: CharacterResponse): List<CharacterModel> {
         val characters = ArrayList<CharacterModel>()
-        //characterResponse.body()?.let {
-        val response : CharacterResponse = characterResponse as CharacterResponse
-            for (character in characterResponse.data.results) {
-                characters.add(
-                    CharacterModel(
-                        id = character.id,
-                        name = character.name,
-                        description = character.description,
-                        picture = character.thumbnail.path+"/portrait_small."+character.thumbnail.extension,
-                        ArrayList<String>(),
-                        ArrayList<String>(),
-                        false
-                    )
+
+        for (character in characterResponse.data.results) {
+            characters.add(
+                CharacterModel(
+                    id = character.id,
+                    name = character.name,
+                    description = character.description,
+                    picture = character.thumbnail.path + "/portrait_small." + character.thumbnail.extension,
+                    ArrayList<String>(),
+                    ArrayList<String>(),
+                    false
                 )
-            }
-        //}
+            )
+        }
 
         return characters
+    }
+
+    override fun favoriteToCharacter(favoriteCharacters: List<FavoriteCharacterModel>): List<CharacterModel> {
+        val characters = ArrayList<CharacterModel>()
+
+        for (character in favoriteCharacters) {
+            characters.add(
+                CharacterModel(
+                    id = character.id,
+                    name = character.name,
+                    description = "",
+                    picture = character.picture,
+                    ArrayList<String>(),
+                    ArrayList<String>(),
+                    true
+                )
+            )
+        }
+
+        return characters
+    }
+
+    override fun toFavorite(characterModel: CharacterModel): FavoriteCharacterModel {
+        return FavoriteCharacterModel(
+            characterModel.id,
+            characterModel.name,
+            characterModel.picture
+        )
     }
 
 }

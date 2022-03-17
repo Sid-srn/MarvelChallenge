@@ -89,8 +89,12 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
                 call.callDetail(item)
             }
             btnFav.setOnClickListener {
-                item.isFavority = true
-                favoriteHandle.saveFavorite(item)
+                if(item.isFavority)
+                    favoriteHandle.deleteFavorite(item)
+                else
+                    favoriteHandle.saveFavorite(item)
+
+                item.isFavority = !item.isFavority
                 notifyDataSetChanged()
             }
         }

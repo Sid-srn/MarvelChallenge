@@ -31,8 +31,13 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
         }
     }
 
-    fun saveFavorite(characterModel: FavoriteCharacterModel){
+    fun saveFavorite(characterModel: CharacterModel){
+
         interactor.saveFavorite(characterModel)
+    }
+
+    fun removeFavorite(characterModel: CharacterModel){
+        interactor.removeFavorite(characterModel)
     }
 
     fun reloadCharacters() {
