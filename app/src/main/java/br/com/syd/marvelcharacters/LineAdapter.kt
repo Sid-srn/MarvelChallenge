@@ -4,17 +4,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
+import com.squareup.picasso.Picasso
 
 class LineAdapter(//private val items: MutableList<CharacterModel>
 ) : RecyclerView.Adapter<LineAdapter.ViewHolder>() {
     private val items: MutableList<CharacterModel> = mutableListOf()
-    lateinit var call: IcallDetail
+    private lateinit var call: IcallDetail
+    private lateinit var favoriteHandle: IFavoriteHandle
     private var layoutManager: StaggeredGridLayoutManager? = null
 
     enum class ViewType {
@@ -30,6 +34,10 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
 
     fun setCallDetail(call: IcallDetail) {
         this.call = call
+    }
+
+    fun setFavoriteHandle(favoriteHandle: IFavoriteHandle) {
+        this.favoriteHandle = favoriteHandle
     }
 
     fun setLayoutManager(layoutManager: StaggeredGridLayoutManager) {
@@ -63,13 +71,23 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val textView: TextView = view.findViewById(R.id.textView)
         private val cardView: CardView = view.findViewById(R.id.card)
+        private val imageView: ImageView = view.findViewById(R.id.imageView)
         val btnFav: ImageButton = view.findViewById(R.id.btn_fav)
 
         fun bind(item: CharacterModel) {
-
+            Picasso.with(itemView.context).load(item.picture).into(imageView)
             textView.text = item.name
+            if (item.isFavority)
+                btnFav.setImageResource(R.drawable.ic_star_filled)
+            else
+                btnFav.setImageResource(R.drawable.ic_star)
             cardView.setOnClickListener {
                 call.callDetail(item)
+            }
+            btnFav.setOnClickListener {
+                item.isFavority = true
+                favoriteHandle.saveFavorite(item)
+                notifyDataSetChanged()
             }
         }
     }

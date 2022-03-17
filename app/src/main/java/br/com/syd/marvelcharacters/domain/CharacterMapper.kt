@@ -19,7 +19,7 @@ class CharacterMapperImpl() : CharacterMapper {
                         id = character.id,
                         name = character.name,
                         description = character.description,
-                        picture = character.thumbnail.path,
+                        picture = character.thumbnail.path+"/portrait_small."+character.thumbnail.extension,
                         ArrayList<String>(),
                         ArrayList<String>(),
                         false
