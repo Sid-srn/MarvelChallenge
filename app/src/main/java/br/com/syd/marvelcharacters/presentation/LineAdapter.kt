@@ -1,5 +1,6 @@
-package br.com.syd.marvelcharacters
+package br.com.syd.marvelcharacters.presentation
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
@@ -26,6 +28,7 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
         DETAILED
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setList(newItems: List<CharacterModel>) {
         items.clear()
         items.addAll(newItems)
@@ -46,7 +49,7 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
 
     override fun getItemCount(): Int = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
             ViewType.DETAILED.ordinal -> ViewHolder(
                 LayoutInflater.from(parent.context)
@@ -59,7 +62,7 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
         }
     }
 
-    override fun onBindViewHolder(holder: LineAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
     }
 
@@ -74,6 +77,7 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
         private val imageView: ImageView = view.findViewById(R.id.imageView)
         val btnFav: ImageButton = view.findViewById(R.id.btn_fav)
 
+        @SuppressLint("NotifyDataSetChanged")
         fun bind(item: CharacterModel) {
             Picasso.with(itemView.context).load(item.picture).into(imageView)
             textView.text = item.name

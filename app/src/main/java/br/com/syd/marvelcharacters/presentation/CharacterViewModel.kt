@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.syd.marvelcharacters.domain.CharacterInteractor
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
 import br.com.syd.marvelcharacters.util.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -28,6 +29,10 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
                 state.value = CharactersViewEvents.NotifyGetCharactersException(ex)
             }
         }
+    }
+
+    fun saveFavorite(characterModel: FavoriteCharacterModel){
+        interactor.saveFavorite(characterModel)
     }
 
     fun reloadCharacters() {

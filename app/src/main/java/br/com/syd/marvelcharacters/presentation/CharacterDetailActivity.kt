@@ -1,12 +1,12 @@
-package br.com.syd.marvelcharacters
+package br.com.syd.marvelcharacters.presentation
 
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 
 class CharacterDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

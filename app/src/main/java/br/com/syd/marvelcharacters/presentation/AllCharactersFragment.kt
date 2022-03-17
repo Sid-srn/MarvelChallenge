@@ -1,4 +1,4 @@
-package br.com.syd.marvelcharacters
+package br.com.syd.marvelcharacters.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -9,11 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
-import br.com.syd.marvelcharacters.presentation.CharacterViewModel
-import br.com.syd.marvelcharacters.presentation.CharactersViewEvents
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
 import com.google.gson.Gson
@@ -119,33 +118,8 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         startActivity(intent)
     }
 
-    fun saveFavorite(favorite: FavoriteCharacterModel) {
-        val favorites = getFavorite()
-        favorites
-        favorites.add(favorite)
-        val sharedPref =
-            activity?.getSharedPreferences("FAVORITE_KEY", Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            val json = Gson().toJson(favorites)
-            putString("FAVORITE_KEY", json)
-            apply()
-        }
-
-    }
-
-    fun getFavorite(): ArrayList<FavoriteCharacterModel> {
-
-        val sharedPref = activity?.getSharedPreferences("FAVORITE_KEY", Context.MODE_PRIVATE)
-        val gsonValue = sharedPref?.getString("FAVORITE_KEY", null)
-        if (gsonValue != null) {
-            val itemType: Type = object : TypeToken<ArrayList<FavoriteCharacterModel>>() {}.type
-            return Gson().fromJson(gsonValue, itemType)
-        }
-        return ArrayList<FavoriteCharacterModel>()
-    }
-
     override fun saveFavorite(characterModel: CharacterModel) {
-        saveFavorite(
+        characterViewModel.saveFavorite(
             FavoriteCharacterModel(
                 characterModel.id,
                 characterModel.name,

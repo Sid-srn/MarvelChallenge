@@ -1,4 +1,4 @@
-package br.com.syd.marvelcharacters
+package br.com.syd.marvelcharacters.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
