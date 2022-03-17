@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 
 class CharacterViewModel(private val interactor: CharacterInteractor) : BaseViewModel() {
 
-    private var state = MutableLiveData<CharactersViewEvents>()
-    val viewState: LiveData<CharactersViewEvents> = state
+    //private var state = MutableLiveData<CharactersViewEvents>()
+    //val viewState: LiveData<CharactersViewEvents> = state
 
     val charactersListOb = MutableLiveData<List<CharacterModel>>()
     val favoriteCharactersListOb = MutableLiveData<List<CharacterModel>>()
@@ -25,9 +25,9 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
                 val characters = interactor.getCharacter()
                 charactersListOb.value = characters
                 favoriteCharactersListOb.value = characters.filter { char -> char.isFavority }
-                state.value = CharactersViewEvents.NotifyGetCharactersSuccess(characters)
+                //state.value = CharactersViewEvents.NotifyGetCharactersSuccess(characters)
             } catch (ex: Exception) {
-                state.value = CharactersViewEvents.NotifyGetCharactersException(ex)
+                //state.value = CharactersViewEvents.NotifyGetCharactersException(ex)
             }
         }
     }

@@ -1,10 +1,13 @@
 package br.com.syd.marvelcharacters.presentation
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -14,7 +17,6 @@ import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
@@ -102,7 +104,25 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
     override fun callDetail(characterModel: CharacterModel) {
         val intent = Intent(this.activity, CharacterDetailActivity::class.java)
         intent.putExtra("name_of_extra", characterModel)
-        startActivity(intent)
+        register.launch(intent)
+    }
+
+    private val register = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.let { data ->
+                if (data.hasExtra("resultTest")) {
+                    val resultCharacter = data.getParcelableExtra<CharacterModel>("resultTest")
+                    resultCharacter?.let { result ->
+                        if (result.isFavority)
+                            characterViewModel.saveFavorite(result)
+                        else
+                            characterViewModel.removeFavorite(result)
+                    }
+                }
+            }
+        }
     }
 
     override fun saveFavorite(characterModel: CharacterModel) {

@@ -1,10 +1,13 @@
 package br.com.syd.marvelcharacters.presentation
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -52,11 +55,6 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
             viewLifecycleOwner,
             Observer(::handleCharacters)
         )
-        /*characterViewModel.viewState.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is CharactersViewEvents.NotifyReloadCharactersSuccess -> handleReloadedCharacters(it.characters)
-            }
-        })*/
     }
 
     private fun handleCharacters(charactersList: List<CharacterModel>) {
@@ -70,7 +68,7 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         characterAdapter.setLayoutManager(lManager)
         binding.allCharactersView.characterRecyclerView.apply {
             layoutManager =
-                lManager//StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                lManager
             adapter = characterAdapter
         }
 
@@ -102,7 +100,25 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
     override fun callDetail(characterModel: CharacterModel) {
         val intent = Intent(this.activity, CharacterDetailActivity::class.java)
         intent.putExtra("name_of_extra", characterModel)
-        startActivity(intent)
+        register.launch(intent)
+    }
+
+    private val register = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { data ->
+                if (data.hasExtra("resultTest")) {
+                    val resultCharacter = data.getParcelableExtra<CharacterModel>("resultTest")
+                    resultCharacter?.let { result ->
+                        if (result.isFavority)
+                            characterViewModel.saveFavorite(result)
+                        else
+                            characterViewModel.removeFavorite(result)
+                    }
+                }
+            }
+        }
     }
 
     override fun saveFavorite(characterModel: CharacterModel) {
