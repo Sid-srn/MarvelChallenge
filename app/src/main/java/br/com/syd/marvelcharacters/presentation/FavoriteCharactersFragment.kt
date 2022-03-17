@@ -1,60 +1,120 @@
 package br.com.syd.marvelcharacters.presentation
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.syd.marvelcharacters.R
+import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
+import br.com.syd.marvelcharacters.databinding.FragmentFavoriteCharactersBinding
+import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.util.IFavoriteHandle
+import br.com.syd.marvelcharacters.util.IcallDetail
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
+    private lateinit var binding: FragmentFavoriteCharactersBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavoriteCharactersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FavoriteCharactersFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val characterAdapter: LineAdapter by lazy {
+        LineAdapter()
     }
+    private lateinit var lManager: StaggeredGridLayoutManager
+
+    private val characterViewModel: CharacterViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorite_characters, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavoriteCharactersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavoriteCharactersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentFavoriteCharactersBinding.bind(view)
+        lManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        setupView()
     }
+
+    private fun setupView() {
+        setupRecyclewView()
+        setListeners()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        characterViewModel.favoriteCharactersListOb.observe(
+            viewLifecycleOwner,
+            Observer(::handleCharacters)
+        )
+        /*characterViewModel.viewState.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is CharactersViewEvents.NotifyReloadCharactersSuccess -> handleReloadedCharacters(it.characters)
+            }
+        })*/
+    }
+
+    private fun handleCharacters(charactersList: List<CharacterModel>) {
+        characterAdapter.setList(charactersList)
+        binding.allCharactersView.swipeContainer.isRefreshing = false
+    }
+
+    private fun setupRecyclewView() {
+        characterAdapter.setCallDetail(this)
+        characterAdapter.setFavoriteHandle(this)
+        characterAdapter.setLayoutManager(lManager)
+        binding.allCharactersView.characterRecyclerView.apply {
+            layoutManager =
+                lManager//StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            adapter = characterAdapter
+        }
+
+        binding.allCharactersView.swipeContainer.setColorSchemeResources(
+            android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light
+        )
+    }
+
+    private fun setListeners() {
+        binding.allCharactersView.swipeContainer.setOnRefreshListener {
+            characterViewModel.reloadCharacters()
+        }
+
+        binding.allCharactersView.changeListBtn.setOnClickListener {
+            if (lManager.spanCount == 1) {
+                lManager.spanCount = 2
+                binding.allCharactersView.changeListBtn.text = "list"
+            } else {
+                lManager.spanCount = 1
+                binding.allCharactersView.changeListBtn.text = "grid"
+            }
+            characterAdapter.notifyItemRangeChanged(0, characterAdapter.itemCount ?: 0)
+        }
+    }
+
+    override fun callDetail(characterModel: CharacterModel) {
+        val intent = Intent(this.activity, CharacterDetailActivity::class.java)
+        intent.putExtra("name_of_extra", characterModel)
+        startActivity(intent)
+    }
+
+    override fun saveFavorite(characterModel: CharacterModel) {
+        characterViewModel.saveFavorite(
+            characterModel
+        )
+    }
+
+    override fun deleteFavorite(characterModel: CharacterModel) {
+        characterViewModel.removeFavorite(
+            characterModel
+        )
+    }
+
 }

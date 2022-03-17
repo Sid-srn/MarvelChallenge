@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.syd.marvelcharacters.domain.CharacterInteractor
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
-import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
 import br.com.syd.marvelcharacters.util.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -14,6 +13,7 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
     val viewState: LiveData<CharactersViewEvents> = state
 
     val charactersListOb = MutableLiveData<List<CharacterModel>>()
+    val favoriteCharactersListOb = MutableLiveData<List<CharacterModel>>()
 
     init {
         getCharacters()
@@ -24,6 +24,7 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
             try {
                 val characters = interactor.getCharacter()
                 charactersListOb.value = characters
+                favoriteCharactersListOb.value = characters.filter { char -> char.isFavority }
                 state.value = CharactersViewEvents.NotifyGetCharactersSuccess(characters)
             } catch (ex: Exception) {
                 state.value = CharactersViewEvents.NotifyGetCharactersException(ex)
@@ -31,24 +32,25 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
         }
     }
 
-    fun saveFavorite(characterModel: CharacterModel){
-
+    fun saveFavorite(characterModel: CharacterModel) {
         interactor.saveFavorite(characterModel)
+        updateLists()
     }
 
-    fun removeFavorite(characterModel: CharacterModel){
+    fun removeFavorite(characterModel: CharacterModel) {
         interactor.removeFavorite(characterModel)
+        updateLists()
+    }
+
+    private fun updateLists() {
+        val updatedList =
+            interactor.updateLocalFavorites(charactersListOb.value ?: listOf())
+        charactersListOb.value = updatedList
+        favoriteCharactersListOb.value = updatedList.filter { char -> char.isFavority }
     }
 
     fun reloadCharacters() {
-        launch {
-            try {
-                val characters = interactor.getCharacter()
-                state.value = CharactersViewEvents.NotifyReloadCharactersSuccess(characters)
-            } catch (ex: Exception) {
-                state.value = CharactersViewEvents.NotifyGetCharactersException(ex)
-            }
-        }
+        getCharacters()
     }
 
 }

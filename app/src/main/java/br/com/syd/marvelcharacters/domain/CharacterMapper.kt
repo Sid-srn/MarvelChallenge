@@ -5,13 +5,13 @@ import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
 
 interface CharacterMapper {
-    fun reponseToCharacter(characterResponse: CharacterResponse): List<CharacterModel>
-    fun favoriteToCharacter(characterResponse: List<FavoriteCharacterModel>): List<CharacterModel>
+    fun reponseToCharacter(characterResponse: CharacterResponse): ArrayList<CharacterModel>
+    fun favoriteToCharacter(characterResponse: ArrayList<FavoriteCharacterModel>): ArrayList<CharacterModel>
     fun toFavorite(characterModel: CharacterModel): FavoriteCharacterModel
 }
 
 class CharacterMapperImpl() : CharacterMapper {
-    override fun reponseToCharacter(characterResponse: CharacterResponse): List<CharacterModel> {
+    override fun reponseToCharacter(characterResponse: CharacterResponse): ArrayList<CharacterModel> {
         val characters = ArrayList<CharacterModel>()
 
         for (character in characterResponse.data.results) {
@@ -31,7 +31,7 @@ class CharacterMapperImpl() : CharacterMapper {
         return characters
     }
 
-    override fun favoriteToCharacter(favoriteCharacters: List<FavoriteCharacterModel>): List<CharacterModel> {
+    override fun favoriteToCharacter(favoriteCharacters: ArrayList<FavoriteCharacterModel>): ArrayList<CharacterModel> {
         val characters = ArrayList<CharacterModel>()
 
         for (character in favoriteCharacters) {

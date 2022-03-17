@@ -13,22 +13,19 @@ import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
-    //private val binding: FragmentAllCharactersBinding by lazy {
-    //    FragmentAllCharactersBinding.inflate(layoutInflater)
-    //}
     private lateinit var binding: FragmentAllCharactersBinding
 
     private val characterAdapter: LineAdapter by lazy {
         LineAdapter()
     }
-
     private lateinit var lManager: StaggeredGridLayoutManager
 
-    private val characterViewModel: CharacterViewModel by viewModel()
+    private val characterViewModel: CharacterViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,53 +52,48 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
             viewLifecycleOwner,
             Observer(::handleCharacters)
         )
-        characterViewModel.viewState.observe(viewLifecycleOwner, Observer {
+        /*characterViewModel.viewState.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is CharactersViewEvents.NotifyReloadCharactersSuccess -> handleReloadedCharacters(it.characters)
             }
-        })
+        })*/
     }
 
     private fun handleCharacters(charactersList: List<CharacterModel>) {
         characterAdapter.setList(charactersList)
-    }
-
-    private fun handleReloadedCharacters(charactersList: List<CharacterModel>) {
-        characterAdapter.setList(charactersList)
-        binding.swipeContainer.isRefreshing = false
+        binding.allCharactersView.swipeContainer.isRefreshing = false
     }
 
     private fun setupRecyclewView() {
         characterAdapter.setCallDetail(this)
         characterAdapter.setFavoriteHandle(this)
         characterAdapter.setLayoutManager(lManager)
-        binding.characterRecyclerView.apply {
+        binding.allCharactersView.characterRecyclerView.apply {
             layoutManager =
                 lManager//StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = characterAdapter
         }
-    }
 
-    private fun setListeners() {
-        binding.swipeContainer.setOnRefreshListener {
-            characterViewModel.reloadCharacters()
-
-        }
-        binding.swipeContainer.setColorSchemeResources(
+        binding.allCharactersView.swipeContainer.setColorSchemeResources(
             android.R.color.holo_blue_bright,
             android.R.color.holo_green_light,
             android.R.color.holo_orange_light,
             android.R.color.holo_red_light
         )
+    }
 
-        binding.changeListBtn.setOnClickListener {
+    private fun setListeners() {
+        binding.allCharactersView.swipeContainer.setOnRefreshListener {
+            characterViewModel.reloadCharacters()
+        }
 
+        binding.allCharactersView.changeListBtn.setOnClickListener {
             if (lManager.spanCount == 1) {
                 lManager.spanCount = 2
-                binding.changeListBtn.text = "list"
+                binding.allCharactersView.changeListBtn.text = "list"
             } else {
                 lManager.spanCount = 1
-                binding.changeListBtn.text = "grid"
+                binding.allCharactersView.changeListBtn.text = "grid"
             }
             characterAdapter.notifyItemRangeChanged(0, characterAdapter.itemCount ?: 0)
         }

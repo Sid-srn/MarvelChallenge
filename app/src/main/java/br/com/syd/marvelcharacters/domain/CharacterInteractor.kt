@@ -4,10 +4,11 @@ import br.com.syd.marvelcharacters.data.CharacterRepository
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 
 interface CharacterInteractor {
-    suspend fun getCharacter(): List<CharacterModel>
-    fun getOffLineFavorite(): List<CharacterModel>
+    suspend fun getCharacter(): ArrayList<CharacterModel>
+    fun getOffLineFavorite(): ArrayList<CharacterModel>
     fun saveFavorite(characterModel: CharacterModel)
     fun removeFavorite(characterModel: CharacterModel)
+    fun updateLocalFavorites(characters: List<CharacterModel>): ArrayList<CharacterModel>
 }
 
 class CharacterInteractorImpl(
@@ -17,7 +18,7 @@ class CharacterInteractorImpl(
     override suspend fun getCharacter() =
         addFavorites(mapper.reponseToCharacter(repository.getCharacter()))
 
-    override fun getOffLineFavorite(): List<CharacterModel> =
+    override fun getOffLineFavorite(): ArrayList<CharacterModel> =
         mapper.favoriteToCharacter(repository.getFavorite())
 
     override fun saveFavorite(characterModel: CharacterModel) =
@@ -26,11 +27,15 @@ class CharacterInteractorImpl(
     override fun removeFavorite(characterModel: CharacterModel) =
         repository.removeFavorite(mapper.toFavorite(characterModel))
 
-    private fun addFavorites(characters: List<CharacterModel>): List<CharacterModel> {
+    override fun updateLocalFavorites(characters: List<CharacterModel>): ArrayList<CharacterModel> =
+        addFavorites(characters as ArrayList)
+
+
+    private fun addFavorites(characters: ArrayList<CharacterModel>): ArrayList<CharacterModel> {
         val favorites = repository.getFavorite()
 
         return characters.mapIndexed { _, character ->
-            if (favorites.any { it.id == character.id }) character.copy(isFavority = true) else character
-        }
+            character.copy(isFavority = (favorites.any { it.id == character.id }))
+        } as ArrayList
     }
 }
