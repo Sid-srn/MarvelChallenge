@@ -25,7 +25,6 @@ class CharacterInteractorImpl(
         return localItens
     }
 
-
     override fun getFavorites(): ArrayList<CharacterModel> =
         mapper.favoriteToCharacter(repository.getFavorite())
 
