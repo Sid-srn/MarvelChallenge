@@ -12,19 +12,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.syd.marvelcharacters.R
-import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
 import br.com.syd.marvelcharacters.databinding.FragmentFavoriteCharactersBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
     private lateinit var binding: FragmentFavoriteCharactersBinding
 
-    private val characterAdapter: LineAdapter by lazy {
-        LineAdapter()
+    private val characterAdapter: CharacterAdapter by lazy {
+        CharacterAdapter()
     }
     private lateinit var lManager: StaggeredGridLayoutManager
 

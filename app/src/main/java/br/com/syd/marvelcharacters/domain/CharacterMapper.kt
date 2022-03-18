@@ -6,7 +6,7 @@ import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
 
 interface CharacterMapper {
     fun reponseToCharacter(characterResponse: CharacterResponse): ArrayList<CharacterModel>
-    fun favoriteToCharacter(characterResponse: ArrayList<FavoriteCharacterModel>): ArrayList<CharacterModel>
+    fun favoriteToCharacter(favoriteCharacters: ArrayList<FavoriteCharacterModel>): ArrayList<CharacterModel>
     fun toFavorite(characterModel: CharacterModel): FavoriteCharacterModel
 }
 

@@ -23,8 +23,8 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
     private lateinit var binding: FragmentAllCharactersBinding
 
-    private val characterAdapter: LineAdapter by lazy {
-        LineAdapter()
+    private val characterAdapter: CharacterAdapter by lazy {
+        CharacterAdapter()
     }
     private lateinit var lManager: StaggeredGridLayoutManager
 

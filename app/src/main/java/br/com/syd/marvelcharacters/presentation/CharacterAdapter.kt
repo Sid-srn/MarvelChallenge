@@ -16,8 +16,8 @@ import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
 import com.squareup.picasso.Picasso
 
-class LineAdapter(//private val items: MutableList<CharacterModel>
-) : RecyclerView.Adapter<LineAdapter.ViewHolder>() {
+class CharacterAdapter(//private val items: MutableList<CharacterModel>
+) : RecyclerView.Adapter<CharacterAdapter.ViewHolder>() {
     private val items: MutableList<CharacterModel> = mutableListOf()
     private lateinit var call: IcallDetail
     private lateinit var favoriteHandle: IFavoriteHandle

@@ -1,5 +1,6 @@
 package br.com.syd.marvelcharacters.presentation
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import br.com.syd.marvelcharacters.domain.CharacterInteractor
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
@@ -18,6 +19,7 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
         getCharacters()
     }
 
+    @VisibleForTesting
     private fun getCharacters() {
         launch {
             try {

@@ -1,5 +1,7 @@
 package br.com.syd.marvelcharacters.charactersTest.domain
 
+import br.com.syd.marvelcharacters.charactersTest.mockTestCharacter
+import br.com.syd.marvelcharacters.charactersTest.mockTestFavorite
 import br.com.syd.marvelcharacters.data.CharacterRepository
 import br.com.syd.marvelcharacters.data.model.CharacterResponse
 import br.com.syd.marvelcharacters.domain.CharacterInteractorImpl
@@ -24,19 +26,9 @@ class CharacterInteractorTest {
     fun `get character return success`() {
         val response = mockk<CharacterResponse>()
         val favoriteResponse = ArrayList<FavoriteCharacterModel>()
-        favoriteResponse.add(FavoriteCharacterModel(0, "Character test name", "picture test"))
+        favoriteResponse.add(mockTestFavorite)
         val mapedResponse = ArrayList<CharacterModel>()
-        mapedResponse.add(
-            CharacterModel(
-                0,
-                "Character test name",
-                "Description test",
-                "picture test",
-                listOf(),
-                listOf(),
-                false
-            )
-        )
+        mapedResponse.add(mockTestCharacter)
         every { response.data.total } returns 10
         every {
             runBlocking {
