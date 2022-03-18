@@ -93,10 +93,10 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         binding.allCharactersView.changeListBtn.setOnClickListener {
             if (lManager.spanCount == 1) {
                 lManager.spanCount = 2
-                binding.allCharactersView.changeListBtn.text = "list"
+                binding.allCharactersView.changeListBtn.setImageResource(R.drawable.ic_list_grid)
             } else {
                 lManager.spanCount = 1
-                binding.allCharactersView.changeListBtn.text = "grid"
+                binding.allCharactersView.changeListBtn.setImageResource(R.drawable.ic_grid_list)
             }
             characterAdapter.notifyItemRangeChanged(0, characterAdapter.itemCount ?: 0)
         }

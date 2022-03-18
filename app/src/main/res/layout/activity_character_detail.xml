@@ -28,6 +28,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/empty_description"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_character_image" />
@@ -36,22 +39,19 @@
                 android:id="@+id/comics_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/comics"
+                android:layout_marginStart="20dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description_text" />
 
-            <TextView
-                android:id="@+id/series_title"
-                android:layout_width="0dp"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/comics"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comics_recycler_view" />
-
+                android:src="@drawable/empty-72"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comics_recycler_view"
                 android:layout_width="0dp"
@@ -59,8 +59,23 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comics_title"
+                app:layout_constraintBottom_toTopOf="@+id/series_title"
                 tools:itemCount="10"
                 tools:listitem="@layout/adapter_simple_itens" />
+
+            <TextView
+                android:id="@+id/series_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/series"
+                android:layout_marginStart="20dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comics_recycler_view" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/series_recycler_view"
@@ -70,9 +85,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/series_title"
                 tools:itemCount="10"
-                tools:listitem="@layout/adapter_character_line_view" />
+                tools:listitem="@layout/adapter_simple_itens" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>s
+    </ScrollView>
 </layout>

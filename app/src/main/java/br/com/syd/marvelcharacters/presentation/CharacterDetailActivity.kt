@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.ActivityCharacterDetailBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.util.Constants.DETAIL_IMAGE
+import br.com.syd.marvelcharacters.util.Constants.LIST_IMAGE
 import com.squareup.picasso.Picasso
 
 class CharacterDetailActivity : AppCompatActivity() {
@@ -54,7 +56,7 @@ class CharacterDetailActivity : AppCompatActivity() {
     }
 
     private fun getLargeImage() =
-        detailedCharacter?.picture?.replace("portrait_small", "standard_amazing") ?: ""
+        detailedCharacter?.picture?.replace(LIST_IMAGE, DETAIL_IMAGE) ?: ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu);

@@ -20,7 +20,7 @@ class CharacterMapperImpl() : CharacterMapper {
                     id = character.id,
                     name = character.name,
                     description = character.description,
-                    picture = character.thumbnail.path + "/portrait_small." + character.thumbnail.extension,
+                    picture = character.thumbnail.path + "/standard_medium." + character.thumbnail.extension,
                     character.comics.items.map { it.name },
                     character.series.items.map { it.name },
                     false

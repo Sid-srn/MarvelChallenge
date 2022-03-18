@@ -78,9 +78,9 @@ class CharacterAdapter(//private val items: MutableList<CharacterModel>
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val textView: TextView = view.findViewById(R.id.textView)
+        private val textView: TextView = view.findViewById(R.id.name_character)
         private val cardView: CardView = view.findViewById(R.id.card)
-        private val imageView: ImageView = view.findViewById(R.id.imageView)
+        private val imageView: ImageView = view.findViewById(R.id.image_character)
         val btnFav: ImageButton = view.findViewById(R.id.btn_fav)
 
         @SuppressLint("NotifyDataSetChanged")

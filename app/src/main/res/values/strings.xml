@@ -13,4 +13,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="comics">Comics</string>
     <string name="empty_description">no Description.</string>
+    <string name="series">series</string>
+    <string name="change_list_layout">change list layout</string>
 </resources>
