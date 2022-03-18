@@ -63,7 +63,7 @@ class CharacterRepositoryTest {
 
         runBlocking {
             repository.saveFavorite(saveData)
-            verify { repository.saveFavorite(saveData) }
+            verify { uiModel.saveFavorite(saveData) }
         }
     }
 
@@ -78,7 +78,7 @@ class CharacterRepositoryTest {
 
         runBlocking {
             repository.removeFavorite(removeData)
-            verify { repository.removeFavorite(removeData) }
+            verify { uiModel.removeFavorite(removeData) }
         }
     }
 
