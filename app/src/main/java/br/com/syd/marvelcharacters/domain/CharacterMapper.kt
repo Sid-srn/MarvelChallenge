@@ -21,8 +21,8 @@ class CharacterMapperImpl() : CharacterMapper {
                     name = character.name,
                     description = character.description,
                     picture = character.thumbnail.path + "/portrait_small." + character.thumbnail.extension,
-                    ArrayList<String>(),
-                    ArrayList<String>(),
+                    character.comics.items.map { it.name },
+                    character.series.items.map { it.name },
                     false
                 )
             )

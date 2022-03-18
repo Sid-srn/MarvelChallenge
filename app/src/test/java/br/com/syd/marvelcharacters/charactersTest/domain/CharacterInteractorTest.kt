@@ -20,7 +20,7 @@ class CharacterInteractorTest {
     private val repository: CharacterRepository = mockk()
     private val mapper: CharacterMapper = mockk()
 
-    private val interactor = CharacterInteractorImpl(repository, mapper)
+    private val characterInteractor = CharacterInteractorImpl(repository, mapper)
 
     @Test
     fun `get character return success`() {
@@ -51,7 +51,7 @@ class CharacterInteractorTest {
         } returns mapedResponse
 
         runBlocking {
-            val result = interactor.getCharacter(ArrayList<CharacterModel>())
+            val result = characterInteractor.getCharacter(ArrayList<CharacterModel>())
             Assert.assertTrue(result.size == 1)
         }
     }
@@ -76,7 +76,7 @@ class CharacterInteractorTest {
         } returns response
 
         runBlocking {
-            val result = interactor.getFavorites()
+            val result = characterInteractor.getFavorites()
             Assert.assertNotNull(result)
         }
     }
@@ -100,7 +100,7 @@ class CharacterInteractorTest {
         } returns saveFavoriteData
 
         runBlocking {
-            interactor.saveFavorite(saveData)
+            characterInteractor.saveFavorite(saveData)
             verify { repository.saveFavorite(any()) }
         }
     }
@@ -123,7 +123,7 @@ class CharacterInteractorTest {
         } returns removeFavoriteData
 
         runBlocking {
-            interactor.removeFavorite(removeData)
+            characterInteractor.removeFavorite(removeData)
             verify { repository.removeFavorite(any()) }
         }
     }
@@ -151,7 +151,7 @@ class CharacterInteractorTest {
         } returns favoriteResponse
 
         runBlocking {
-            val result = interactor.updateLocalFavorites(response)
+            val result = characterInteractor.updateLocalFavorites(response)
             Assert.assertTrue(result.size == 1)
             Assert.assertTrue(result.first().isFavority)
         }

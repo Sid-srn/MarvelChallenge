@@ -6,15 +6,18 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.ActivityCharacterDetailBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import com.squareup.picasso.Picasso
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class CharacterDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCharacterDetailBinding
     private var detailedCharacter: CharacterModel? = null
+    private val comicsAdapter: SimpleItensAdapter by lazy {
+        SimpleItensAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,18 +25,36 @@ class CharacterDetailActivity : AppCompatActivity() {
 
         detailedCharacter = intent.getParcelableExtra<CharacterModel>("name_of_extra")
 
-
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.setDisplayShowCustomEnabled(true)
         actionBar?.title = detailedCharacter?.name ?: ""
 
-        //binding.name.text = detailedCharacter?.name ?: ""
-
         Picasso.with(this)
-            .load(detailedCharacter?.picture?.replace("portrait_small", "standard_amazing") ?: "")
+            .load(getLargeImage())
             .into(binding.detailCharacterImage)
+
+        detailedCharacter?.let {
+            if (!it.description.isNullOrBlank())
+                binding.descriptionText.text = it.description
+        }
+
+        comicsAdapter.setList(detailedCharacter?.comics ?: arrayListOf())
+        binding.comicsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this.context)
+            adapter = comicsAdapter
+        }
+
+        comicsAdapter.setList(detailedCharacter?.comics ?: arrayListOf())
+        binding.comicsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this.context)
+            adapter = comicsAdapter
+        }
+
     }
+
+    private fun getLargeImage() =
+        detailedCharacter?.picture?.replace("portrait_small", "standard_amazing") ?: ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu);

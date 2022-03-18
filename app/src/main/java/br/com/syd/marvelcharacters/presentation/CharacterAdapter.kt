@@ -59,11 +59,11 @@ class CharacterAdapter(//private val items: MutableList<CharacterModel>
         return when (viewType) {
             ViewType.DETAILED.ordinal -> ViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.character_grid_view, parent, false)
+                    .inflate(R.layout.adapter_character_grid_view, parent, false)
             )
             else -> ViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.character_line_view, parent, false)
+                    .inflate(R.layout.adapter_character_line_view, parent, false)
             )
         }
     }

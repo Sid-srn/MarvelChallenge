@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/openBtn"
             tools:itemCount="10"
-            tools:listitem="@layout/character_line_view" />
+            tools:listitem="@layout/adapter_character_line_view" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
