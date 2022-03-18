@@ -28,7 +28,7 @@ class CharacterDetailActivity : AppCompatActivity() {
         actionBar?.setDisplayShowCustomEnabled(true)
         actionBar?.title = detailedCharacter?.name ?: ""
 
-        binding.name.text = detailedCharacter?.name ?: ""
+        //binding.name.text = detailedCharacter?.name ?: ""
 
         Picasso.with(this)
             .load(detailedCharacter?.picture?.replace("portrait_small", "standard_amazing") ?: "")
