@@ -2,6 +2,7 @@ package br.com.syd.marvelcharacters.presentation
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import br.com.syd.marvelcharacters.domain.CharacterInteractor
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.util.BaseViewModel
