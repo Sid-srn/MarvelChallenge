@@ -35,6 +35,12 @@ class LineAdapter(//private val items: MutableList<CharacterModel>
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun addList(newItems: List<CharacterModel>) {
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
+
     fun setCallDetail(call: IcallDetail) {
         this.call = call
     }

@@ -9,6 +9,7 @@ import retrofit2.http.Query
 interface CharacterService {
     @GET("characters")
     suspend fun getCharacter(
+        @Query("offset") offSet : Int,
         @Query("ts") timestamp : String,
         @Query("apikey") apikey: String,
         @Query("hash") hash: String

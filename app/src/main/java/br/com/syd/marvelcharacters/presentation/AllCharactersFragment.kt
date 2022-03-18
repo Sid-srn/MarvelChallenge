@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
@@ -86,7 +87,7 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     private fun setListeners() {
         binding.allCharactersView.swipeContainer.setOnRefreshListener {
-            characterViewModel.reloadCharacters()
+            characterViewModel.resetList()
         }
 
         binding.allCharactersView.changeListBtn.setOnClickListener {
@@ -99,6 +100,16 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
             }
             characterAdapter.notifyItemRangeChanged(0, characterAdapter.itemCount ?: 0)
         }
+        binding.allCharactersView.characterRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (!recyclerView.canScrollVertically(1) && lManager.childCount > 0) {
+                    characterViewModel.loadMoreCharacters()
+                }
+            }
+        })
     }
 
     override fun callDetail(characterModel: CharacterModel) {

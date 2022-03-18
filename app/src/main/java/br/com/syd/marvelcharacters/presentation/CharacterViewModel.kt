@@ -1,6 +1,5 @@
 package br.com.syd.marvelcharacters.presentation
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.syd.marvelcharacters.domain.CharacterInteractor
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
@@ -22,7 +21,10 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
     private fun getCharacters() {
         launch {
             try {
-                val characters = interactor.getCharacter()
+                val characters = interactor.getCharacter(
+                    (charactersListOb.value
+                        ?: arrayListOf()) as ArrayList<CharacterModel>
+                )
                 charactersListOb.value = characters
                 favoriteCharactersListOb.value = characters.filter { char -> char.isFavority }
                 //state.value = CharactersViewEvents.NotifyGetCharactersSuccess(characters)
@@ -49,7 +51,12 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
         favoriteCharactersListOb.value = updatedList.filter { char -> char.isFavority }
     }
 
-    fun reloadCharacters() {
+    fun loadMoreCharacters() {
+        getCharacters()
+    }
+
+    fun resetList() {
+        charactersListOb.value = ArrayList()
         getCharacters()
     }
 

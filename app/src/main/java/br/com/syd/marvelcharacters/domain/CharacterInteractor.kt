@@ -4,8 +4,8 @@ import br.com.syd.marvelcharacters.data.CharacterRepository
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 
 interface CharacterInteractor {
-    suspend fun getCharacter(): ArrayList<CharacterModel>
-    fun getOffLineFavorite(): ArrayList<CharacterModel>
+    suspend fun getCharacter(localItens: ArrayList<CharacterModel>): ArrayList<CharacterModel>
+    fun getFavorites(): ArrayList<CharacterModel>
     fun saveFavorite(characterModel: CharacterModel)
     fun removeFavorite(characterModel: CharacterModel)
     fun updateLocalFavorites(characters: List<CharacterModel>): ArrayList<CharacterModel>
@@ -15,10 +15,18 @@ class CharacterInteractorImpl(
     private val repository: CharacterRepository,
     private val mapper: CharacterMapper
 ) : CharacterInteractor {
-    override suspend fun getCharacter() =
-        addFavorites(mapper.reponseToCharacter(repository.getCharacter()))
+    var totalCharacters = 0
+    override suspend fun getCharacter(localItens: ArrayList<CharacterModel>): ArrayList<CharacterModel> {
+        if (localItens.size <= totalCharacters) {
+            val response = repository.getCharacter(localItens.size)
+            totalCharacters = response.data.total
+            localItens.addAll(addFavorites(mapper.reponseToCharacter(response)))
+        }
+        return localItens
+    }
 
-    override fun getOffLineFavorite(): ArrayList<CharacterModel> =
+
+    override fun getFavorites(): ArrayList<CharacterModel> =
         mapper.favoriteToCharacter(repository.getFavorite())
 
     override fun saveFavorite(characterModel: CharacterModel) =
@@ -37,5 +45,16 @@ class CharacterInteractorImpl(
         return characters.mapIndexed { _, character ->
             character.copy(isFavority = (favorites.any { it.id == character.id }))
         } as ArrayList
+    }
+
+    private fun addCharactersData(
+        characters: ArrayList<CharacterModel>,
+        onlineCharacters: ArrayList<CharacterModel>
+    ): ArrayList<CharacterModel> {
+        characters.removeAll(onlineCharacters)
+        val onlineFavorite =
+            onlineCharacters.filter { char -> char.isFavority } as ArrayList<CharacterModel>
+        onlineFavorite.addAll(characters)
+        return onlineFavorite
     }
 }

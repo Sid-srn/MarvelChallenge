@@ -82,7 +82,7 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     private fun setListeners() {
         binding.allCharactersView.swipeContainer.setOnRefreshListener {
-            characterViewModel.reloadCharacters()
+            characterViewModel.resetList()
         }
 
         binding.allCharactersView.changeListBtn.setOnClickListener {
