@@ -65,6 +65,9 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
     private fun handleCharacters(charactersList: List<CharacterModel>) {
         characterAdapter.setList(charactersList)
         binding.allCharactersView.swipeContainer.isRefreshing = false
+        binding.shimmerViewContainer.visibility = View.GONE
+        binding.shimmerViewContainer.stopShimmer();
+        binding.allCharactersView.charactersGridLayout.visibility = View.VISIBLE
     }
 
     private fun setupRecyclewView() {
@@ -146,5 +149,15 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         characterViewModel.removeFavorite(
             characterModel
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.shimmerViewContainer.startShimmer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.shimmerViewContainer.stopShimmer()
     }
 }

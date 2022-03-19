@@ -7,11 +7,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import br.com.syd.marvelcharacters.R
-import br.com.syd.marvelcharacters.databinding.ActivityMainBinding
+import br.com.syd.marvelcharacters.databinding.ActivityMarvelCharactersBinding
 
 class MainActivity : AppCompatActivity() {
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+    private val binding: ActivityMarvelCharactersBinding by lazy {
+        ActivityMarvelCharactersBinding.inflate(layoutInflater)
     }
 
     private lateinit var charatersPagerAdapter: CharatersPagerAdapter
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_marvel_characters)
 
         val viewPager = findViewById<ViewPager>(R.id.pager)
 
