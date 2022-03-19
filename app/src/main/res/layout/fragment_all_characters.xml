@@ -13,7 +13,6 @@
             android:id="@+id/swipe_connection_error"
             android:layout_width="0dp"
             android:layout_height="0dp"
-
             android:layout_margin="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,8 +87,7 @@
 
         <include
             android:id="@+id/all_characters_view"
-            layout="@layout/characters_list_view"
-            android:visibility="gone" />
+            layout="@layout/characters_list_view" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

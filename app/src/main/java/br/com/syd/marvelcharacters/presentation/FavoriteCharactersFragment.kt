@@ -59,7 +59,11 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     private fun handleCharacters(charactersList: List<CharacterModel>) {
         characterAdapter.setList(charactersList)
-        binding.allCharactersView.swipeContainer.isRefreshing = false
+        if (charactersList.isNotEmpty()) {
+            showSuccessView()
+        } else
+            showEmptyView()
+
     }
 
     private fun setupRecyclewView() {
@@ -81,6 +85,10 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     private fun setListeners() {
         binding.allCharactersView.swipeContainer.setOnRefreshListener {
+            characterViewModel.resetList()
+        }
+
+        binding.swipeEmpty.setOnRefreshListener {
             characterViewModel.resetList()
         }
 
@@ -108,7 +116,8 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
                 if (data.hasExtra(CHARACTER_INTENT_RESULT)) {
-                    val resultCharacter = data.getParcelableExtra<CharacterModel>(CHARACTER_INTENT_RESULT)
+                    val resultCharacter =
+                        data.getParcelableExtra<CharacterModel>(CHARACTER_INTENT_RESULT)
                     resultCharacter?.let { result ->
                         if (result.isFavority)
                             characterViewModel.saveFavorite(result)
@@ -130,6 +139,23 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         characterViewModel.removeFavorite(
             characterModel
         )
+    }
+
+    private fun showEmptyView() {
+        binding.emptyImage.visibility = View.VISIBLE
+        binding.emptyText.visibility = View.VISIBLE
+        binding.allCharactersView.changeListBtn.visibility = View.GONE
+        binding.allCharactersView.swipeContainer.isRefreshing = false
+        binding.swipeEmpty.isRefreshing = false
+    }
+
+    private fun showSuccessView() {
+        binding.emptyImage.visibility = View.GONE
+        binding.emptyText.visibility = View.GONE
+        binding.allCharactersView.changeListBtn.visibility = View.VISIBLE
+        binding.allCharactersView.swipeContainer.isRefreshing = false
+        binding.swipeEmpty.isRefreshing = false
+
     }
 
 }

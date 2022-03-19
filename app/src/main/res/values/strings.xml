@@ -18,4 +18,5 @@
     <string name="favorite">favoritos</string>
     <string name="no_series">series indisponiveis</string>
     <string name="connection_fail">falha na conexão</string>
+    <string name="no_favorites">sem favoritos</string>
 </resources>
