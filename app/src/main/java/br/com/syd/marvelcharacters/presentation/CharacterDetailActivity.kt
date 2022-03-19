@@ -46,6 +46,7 @@ class CharacterDetailActivity : AppCompatActivity() {
         if ((detailedCharacter?.comics ?: arrayListOf()).isNotEmpty()) {
             binding.comicsRecyclerView.visibility = View.VISIBLE
             binding.emptyComicsCard.visibility = View.GONE
+            comicsAdapter.setIcon(R.drawable.ic_comics)
             comicsAdapter.setList(detailedCharacter?.comics ?: arrayListOf())
             binding.comicsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(this.context)
@@ -59,6 +60,7 @@ class CharacterDetailActivity : AppCompatActivity() {
         if ((detailedCharacter?.series ?: arrayListOf()).isNotEmpty()) {
             binding.seriesRecyclerView.visibility = View.VISIBLE
             binding.emptySeriesCard.visibility = View.GONE
+            seriesAdapter.setIcon(R.drawable.ic_series)
             seriesAdapter.setList(detailedCharacter?.series ?: arrayListOf())
             binding.seriesRecyclerView.apply {
                 layoutManager = LinearLayoutManager(this.context)
