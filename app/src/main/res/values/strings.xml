@@ -15,4 +15,5 @@
     <string name="empty_description">no Description.</string>
     <string name="series">series</string>
     <string name="change_list_layout">change list layout</string>
+    <string name="no_comics">no comics</string>
 </resources>

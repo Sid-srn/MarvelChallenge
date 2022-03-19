@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,9 @@ class CharacterDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCharacterDetailBinding
     private var detailedCharacter: CharacterModel? = null
     private val comicsAdapter: SimpleItensAdapter by lazy {
+        SimpleItensAdapter()
+    }
+    private val seriesAdapter: SimpleItensAdapter by lazy {
         SimpleItensAdapter()
     }
 
@@ -41,16 +45,30 @@ class CharacterDetailActivity : AppCompatActivity() {
                 binding.descriptionText.text = it.description
         }
 
-        comicsAdapter.setList(detailedCharacter?.comics ?: arrayListOf())
-        binding.comicsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this.context)
-            adapter = comicsAdapter
+        if ((detailedCharacter?.comics ?: arrayListOf()).isNotEmpty()) {
+            binding.comicsRecyclerView.visibility = View.VISIBLE
+            binding.emptyComicsCard.visibility = View.GONE
+            comicsAdapter.setList(detailedCharacter?.comics ?: arrayListOf())
+            binding.comicsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(this.context)
+                adapter = comicsAdapter
+            }
+        } else {
+            binding.comicsRecyclerView.visibility = View.GONE
+            binding.emptyComicsCard.visibility = View.VISIBLE
         }
 
-        comicsAdapter.setList(detailedCharacter?.comics ?: arrayListOf())
-        binding.comicsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this.context)
-            adapter = comicsAdapter
+        if ((detailedCharacter?.series ?: arrayListOf()).isNotEmpty()) {
+            binding.seriesRecyclerView.visibility = View.VISIBLE
+            binding.emptySeriesCard.visibility = View.GONE
+            seriesAdapter.setList(detailedCharacter?.series ?: arrayListOf())
+            binding.seriesRecyclerView.apply {
+                layoutManager = LinearLayoutManager(this.context)
+                adapter = seriesAdapter
+            }
+        }else {
+            binding.seriesRecyclerView.visibility = View.GONE
+            binding.emptySeriesCard.visibility = View.VISIBLE
         }
 
     }

@@ -9,7 +9,7 @@ data class CharacterModel(
     var description: String,
     var picture: String,
     var comics: List<String>,
-    var Series: List<String>,
+    var series: List<String>,
     var isFavority: Boolean
     //var modified: String,
     //var thumbnail: Thumbnail,
