@@ -57,14 +57,20 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
             viewLifecycleOwner,
             Observer(::handleCharacters)
         )
+        characterViewModel.characterExceptionOb.observe(
+            viewLifecycleOwner,
+            Observer(::handleError)
+        )
+    }
+
+
+    private fun handleError(exception: Exception?) {
+        showErrorView()
     }
 
     private fun handleCharacters(charactersList: List<CharacterModel>) {
         characterAdapter.setList(charactersList)
-        binding.allCharactersView.swipeContainer.isRefreshing = false
-        binding.shimmerViewContainer.visibility = View.GONE
-        binding.shimmerViewContainer.stopShimmer();
-        binding.allCharactersView.charactersGridLayout.visibility = View.VISIBLE
+        showSuccessView()
     }
 
     private fun setupRecyclewView() {
@@ -87,6 +93,10 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     private fun setListeners() {
         binding.allCharactersView.swipeContainer.setOnRefreshListener {
+            characterViewModel.resetList()
+        }
+
+        binding.swipeConnectionError.setOnRefreshListener {
             characterViewModel.resetList()
         }
 
@@ -149,13 +159,33 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.shimmerViewContainer.startShimmer()
-    }
-
     override fun onPause() {
         super.onPause()
         binding.shimmerViewContainer.stopShimmer()
+    }
+
+    private fun showLoadingView() {
+        binding.shimmerViewContainer.visibility = View.VISIBLE
+        binding.shimmerViewContainer.startShimmer()
+    }
+
+    private fun showErrorView() {
+        binding.connectionErrorImage.visibility = View.VISIBLE
+        binding.connectionErrorText.visibility = View.VISIBLE
+        binding.allCharactersView.swipeContainer.isRefreshing = false
+        binding.swipeConnectionError.isRefreshing = false
+        binding.shimmerViewContainer.visibility = View.GONE
+        binding.allCharactersView.charactersGridLayout.visibility = View.GONE
+        binding.shimmerViewContainer.stopShimmer();
+    }
+
+    private fun showSuccessView() {
+        binding.connectionErrorImage.visibility = View.GONE
+        binding.connectionErrorText.visibility = View.GONE
+        binding.allCharactersView.swipeContainer.isRefreshing = false
+        binding.swipeConnectionError.isRefreshing = false
+        binding.shimmerViewContainer.visibility = View.GONE
+        binding.allCharactersView.charactersGridLayout.visibility = View.VISIBLE
+        binding.shimmerViewContainer.stopShimmer();
     }
 }

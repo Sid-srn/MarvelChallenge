@@ -17,4 +17,5 @@
     <string name="all">todos</string>
     <string name="favorite">favoritos</string>
     <string name="no_series">series indisponiveis</string>
+    <string name="connection_fail">falha na conexão</string>
 </resources>
