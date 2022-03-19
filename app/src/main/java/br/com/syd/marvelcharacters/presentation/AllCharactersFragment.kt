@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.FragmentAllCharactersBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.util.Constants.CHARACTER_INTENT_EXTRA
+import br.com.syd.marvelcharacters.util.Constants.CHARACTER_INTENT_RESULT
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -55,11 +57,6 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
             viewLifecycleOwner,
             Observer(::handleCharacters)
         )
-        /*characterViewModel.viewState.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is CharactersViewEvents.NotifyReloadCharactersSuccess -> handleReloadedCharacters(it.characters)
-            }
-        })*/
     }
 
     private fun handleCharacters(charactersList: List<CharacterModel>) {
@@ -76,7 +73,7 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         characterAdapter.setLayoutManager(lManager)
         binding.allCharactersView.characterRecyclerView.apply {
             layoutManager =
-                lManager//StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                lManager
             adapter = characterAdapter
         }
 
@@ -103,6 +100,7 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
             }
             characterAdapter.notifyItemRangeChanged(0, characterAdapter.itemCount ?: 0)
         }
+
         binding.allCharactersView.characterRecyclerView.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -117,7 +115,7 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     override fun callDetail(characterModel: CharacterModel) {
         val intent = Intent(this.activity, CharacterDetailActivity::class.java)
-        intent.putExtra("name_of_extra", characterModel)
+        intent.putExtra(CHARACTER_INTENT_EXTRA, characterModel)
         register.launch(intent)
     }
 
@@ -126,8 +124,8 @@ class AllCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
             result.data?.let { data ->
-                if (data.hasExtra("resultTest")) {
-                    val resultCharacter = data.getParcelableExtra<CharacterModel>("resultTest")
+                if (data.hasExtra(CHARACTER_INTENT_RESULT)) {
+                    val resultCharacter = data.getParcelableExtra<CharacterModel>(CHARACTER_INTENT_RESULT)
                     resultCharacter?.let { result ->
                         if (result.isFavority)
                             characterViewModel.saveFavorite(result)

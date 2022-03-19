@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.ActivityCharacterDetailBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.util.Constants.CHARACTER_INTENT_EXTRA
+import br.com.syd.marvelcharacters.util.Constants.CHARACTER_INTENT_RESULT
 import br.com.syd.marvelcharacters.util.Constants.DETAIL_IMAGE
 import br.com.syd.marvelcharacters.util.Constants.LIST_IMAGE
 import com.squareup.picasso.Picasso
@@ -29,22 +31,18 @@ class CharacterDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_character_detail)
 
-        detailedCharacter = intent.getParcelableExtra<CharacterModel>("name_of_extra")
+        detailedCharacter = intent.getParcelableExtra(CHARACTER_INTENT_EXTRA)
 
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setDisplayShowCustomEnabled(true)
-        actionBar?.title = detailedCharacter?.name ?: ""
+        setupView()
+    }
 
-        Picasso.with(this)
-            .load(getLargeImage())
-            .into(binding.detailCharacterImage)
+    private fun setupView() {
+        setupActionBar()
+        setupDetails()
+        setupRecyclewView()
+    }
 
-        detailedCharacter?.let {
-            if (!it.description.isNullOrBlank())
-                binding.descriptionText.text = it.description
-        }
-
+    private fun setupRecyclewView() {
         if ((detailedCharacter?.comics ?: arrayListOf()).isNotEmpty()) {
             binding.comicsRecyclerView.visibility = View.VISIBLE
             binding.emptyComicsCard.visibility = View.GONE
@@ -66,11 +64,28 @@ class CharacterDetailActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this.context)
                 adapter = seriesAdapter
             }
-        }else {
+        } else {
             binding.seriesRecyclerView.visibility = View.GONE
             binding.emptySeriesCard.visibility = View.VISIBLE
         }
+    }
 
+    private fun setupDetails() {
+        Picasso.with(this)
+            .load(getLargeImage())
+            .into(binding.detailCharacterImage)
+
+        detailedCharacter?.let {
+            if (!it.description.isNullOrBlank())
+                binding.descriptionText.text = it.description
+        }
+    }
+
+    private fun setupActionBar() {
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.setDisplayShowCustomEnabled(true)
+        actionBar?.title = detailedCharacter?.name ?: ""
     }
 
     private fun getLargeImage() =
@@ -110,7 +125,7 @@ class CharacterDetailActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         Intent().apply {
-            putExtra("resultTest", detailedCharacter)
+            putExtra(CHARACTER_INTENT_RESULT, detailedCharacter)
             setResult(RESULT_OK, this)
         }
         super.onBackPressed()

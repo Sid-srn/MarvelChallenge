@@ -1,6 +1,7 @@
 package br.com.syd.marvelcharacters.presentation
 
 import android.os.Bundle
+import android.view.WindowInsets.Side.all
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -10,9 +11,7 @@ import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.ActivityMarvelCharactersBinding
 
 class MainActivity : AppCompatActivity() {
-    private val binding: ActivityMarvelCharactersBinding by lazy {
-        ActivityMarvelCharactersBinding.inflate(layoutInflater)
-    }
+    private lateinit var binding: ActivityMarvelCharactersBinding
 
     private lateinit var charatersPagerAdapter: CharatersPagerAdapter
 
@@ -24,14 +23,13 @@ class MainActivity : AppCompatActivity() {
         val viewPager = findViewById<ViewPager>(R.id.pager)
 
         charatersPagerAdapter = CharatersPagerAdapter(supportFragmentManager)
-        charatersPagerAdapter.add(AllCharactersFragment(), "All")
-        charatersPagerAdapter.add(FavoriteCharactersFragment(), "Favorite")
-        //binding.pager.adapter= charatersPagerAdapter
+        charatersPagerAdapter.add(AllCharactersFragment(), resources.getString(R.string.all))
+        charatersPagerAdapter.add(FavoriteCharactersFragment(), resources.getString(R.string.favorite))
         viewPager.adapter = charatersPagerAdapter
     }
 }
 
-class CharatersPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class CharatersPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val listFragments = ArrayList<Fragment>()
     private val listFragmentsTitle = ArrayList<String>()
@@ -51,5 +49,3 @@ class CharatersPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm)
         return listFragmentsTitle[position]
     }
 }
-
-private const val ARG_OBJECT = "object"

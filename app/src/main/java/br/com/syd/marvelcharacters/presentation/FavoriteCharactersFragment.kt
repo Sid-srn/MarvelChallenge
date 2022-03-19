@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.syd.marvelcharacters.R
 import br.com.syd.marvelcharacters.databinding.FragmentFavoriteCharactersBinding
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
+import br.com.syd.marvelcharacters.util.Constants.CHARACTER_INTENT_EXTRA
+import br.com.syd.marvelcharacters.util.Constants.CHARACTER_INTENT_RESULT
 import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -97,7 +99,7 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
 
     override fun callDetail(characterModel: CharacterModel) {
         val intent = Intent(this.activity, CharacterDetailActivity::class.java)
-        intent.putExtra("name_of_extra", characterModel)
+        intent.putExtra(CHARACTER_INTENT_EXTRA, characterModel)
         register.launch(intent)
     }
 
@@ -106,8 +108,8 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
-                if (data.hasExtra("resultTest")) {
-                    val resultCharacter = data.getParcelableExtra<CharacterModel>("resultTest")
+                if (data.hasExtra(CHARACTER_INTENT_RESULT)) {
+                    val resultCharacter = data.getParcelableExtra<CharacterModel>(CHARACTER_INTENT_RESULT)
                     resultCharacter?.let { result ->
                         if (result.isFavority)
                             characterViewModel.saveFavorite(result)

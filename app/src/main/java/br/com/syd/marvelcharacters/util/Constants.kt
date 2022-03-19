@@ -6,4 +6,7 @@ object Constants {
     const val TIME_STAMP = "1"
     const val LIST_IMAGE = "standard_medium"
     const val DETAIL_IMAGE = "standard_amazing"
+    const val CHARACTER_INTENT_EXTRA = "CHARACTER_INTENT_EXTRA"
+    const val CHARACTER_INTENT_RESULT = "CHARACTER_INTENT_RESULT"
+    const val FAVORITE_KEY = "FAVORITE_KEY"
 }

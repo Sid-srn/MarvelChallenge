@@ -45,15 +45,4 @@ class CharacterInteractorImpl(
             character.copy(isFavority = (favorites.any { it.id == character.id }))
         } as ArrayList
     }
-
-    private fun addCharactersData(
-        characters: ArrayList<CharacterModel>,
-        onlineCharacters: ArrayList<CharacterModel>
-    ): ArrayList<CharacterModel> {
-        characters.removeAll(onlineCharacters)
-        val onlineFavorite =
-            onlineCharacters.filter { char -> char.isFavority } as ArrayList<CharacterModel>
-        onlineFavorite.addAll(characters)
-        return onlineFavorite
-    }
 }

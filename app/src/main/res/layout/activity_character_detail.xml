@@ -167,7 +167,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:text="no series"
+                            android:text="@string/no_series"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:textColor="@color/material_dynamic_neutral20"

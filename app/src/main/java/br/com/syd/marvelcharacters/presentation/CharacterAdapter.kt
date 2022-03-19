@@ -16,7 +16,7 @@ import br.com.syd.marvelcharacters.util.IFavoriteHandle
 import br.com.syd.marvelcharacters.util.IcallDetail
 import com.squareup.picasso.Picasso
 
-class CharacterAdapter(//private val items: MutableList<CharacterModel>
+class CharacterAdapter(
 ) : RecyclerView.Adapter<CharacterAdapter.ViewHolder>() {
     private val items: MutableList<CharacterModel> = mutableListOf()
     private lateinit var call: IcallDetail
@@ -31,12 +31,6 @@ class CharacterAdapter(//private val items: MutableList<CharacterModel>
     @SuppressLint("NotifyDataSetChanged")
     fun setList(newItems: List<CharacterModel>) {
         items.clear()
-        items.addAll(newItems)
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun addList(newItems: List<CharacterModel>) {
         items.addAll(newItems)
         notifyDataSetChanged()
     }

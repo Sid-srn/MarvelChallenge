@@ -1,19 +1,20 @@
 <resources>
-    <string name="app_name">Marvel Characters</string>
+    <string name="app_name">Personagens Marvel</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_character_detail">CharacterDetailActivity</string>
+    <string name="title_activity_character_detail">Detalhes do Personagem</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="next">próximo</string>
+    <string name="previous">anterior</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="comics">Comics</string>
-    <string name="empty_description">no Description.</string>
+    <string name="comics">quadrinhos</string>
+    <string name="empty_description">sem descrição.</string>
     <string name="series">series</string>
-    <string name="change_list_layout">change list layout</string>
-    <string name="no_comics">no comics</string>
+    <string name="change_list_layout">alterar layout da lista</string>
+    <string name="no_comics">quadrinhos indisponiveis</string>
+    <string name="all">todos</string>
+    <string name="favorite">favoritos</string>
+    <string name="no_series">series indisponiveis</string>
 </resources>

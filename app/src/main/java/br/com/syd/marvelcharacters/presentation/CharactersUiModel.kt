@@ -2,6 +2,7 @@ package br.com.syd.marvelcharacters.presentation
 
 import android.content.Context
 import br.com.syd.marvelcharacters.domain.model.FavoriteCharacterModel
+import br.com.syd.marvelcharacters.util.Constants.FAVORITE_KEY
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
@@ -29,8 +30,8 @@ class CharactersUiModelImpl(private val context: Context) : CharactersUiModel {
     }
 
     override fun getFavorite(): ArrayList<FavoriteCharacterModel> {
-        val sharedPref = context.getSharedPreferences("FAVORITE_KEY", Context.MODE_PRIVATE)
-        val gsonValue = sharedPref?.getString("FAVORITE_KEY", null)
+        val sharedPref = context.getSharedPreferences(FAVORITE_KEY, Context.MODE_PRIVATE)
+        val gsonValue = sharedPref?.getString(FAVORITE_KEY, null)
         if (gsonValue != null) {
             val itemType: Type = object : TypeToken<ArrayList<FavoriteCharacterModel>>() {}.type
             return Gson().fromJson(gsonValue, itemType)
@@ -40,10 +41,10 @@ class CharactersUiModelImpl(private val context: Context) : CharactersUiModel {
 
     private fun SaveList(favorites: ArrayList<FavoriteCharacterModel>) {
         val sharedPref =
-            context.getSharedPreferences("FAVORITE_KEY", Context.MODE_PRIVATE) ?: return
+            context.getSharedPreferences(FAVORITE_KEY, Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
             val json = Gson().toJson(favorites)
-            putString("FAVORITE_KEY", json)
+            putString(FAVORITE_KEY, json)
             apply()
         }
     }
