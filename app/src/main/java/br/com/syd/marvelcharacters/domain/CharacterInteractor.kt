@@ -8,7 +8,7 @@ interface CharacterInteractor {
     fun getFavorites(): ArrayList<CharacterModel>
     fun saveFavorite(characterModel: CharacterModel)
     fun removeFavorite(characterModel: CharacterModel)
-    fun updateLocalFavorites(characters: List<CharacterModel>): ArrayList<CharacterModel>
+    fun updateLocalFavorites(characters: ArrayList<CharacterModel>): ArrayList<CharacterModel>
 }
 
 class CharacterInteractorImpl(
@@ -34,8 +34,8 @@ class CharacterInteractorImpl(
     override fun removeFavorite(characterModel: CharacterModel) =
         repository.removeFavorite(mapper.toFavorite(characterModel))
 
-    override fun updateLocalFavorites(characters: List<CharacterModel>): ArrayList<CharacterModel> =
-        addFavorites(characters as ArrayList)
+    override fun updateLocalFavorites(characters: ArrayList<CharacterModel>): ArrayList<CharacterModel> =
+        addFavorites(characters)
 
 
     private fun addFavorites(characters: ArrayList<CharacterModel>): ArrayList<CharacterModel> {

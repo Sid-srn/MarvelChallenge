@@ -67,8 +67,7 @@ class FavoriteCharactersFragment : Fragment(), IcallDetail, IFavoriteHandle {
         characterAdapter.setFavoriteHandle(this)
         characterAdapter.setLayoutManager(lManager)
         binding.allCharactersView.characterRecyclerView.apply {
-            layoutManager =
-                lManager
+            layoutManager = lManager
             adapter = characterAdapter
         }
 

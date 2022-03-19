@@ -2,7 +2,6 @@ package br.com.syd.marvelcharacters.presentation
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import br.com.syd.marvelcharacters.domain.CharacterInteractor
 import br.com.syd.marvelcharacters.domain.model.CharacterModel
 import br.com.syd.marvelcharacters.util.BaseViewModel
@@ -30,6 +29,7 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
                 favoriteCharactersListOb.value = characters.filter { char -> char.isFavority }
             } catch (ex: Exception) {
                 characterExceptionOb.value = ex
+                favoriteCharactersListOb.value = interactor.getFavorites()
             }
         }
     }
@@ -46,9 +46,15 @@ class CharacterViewModel(private val interactor: CharacterInteractor) : BaseView
 
     private fun updateLists() {
         val updatedList =
-            interactor.updateLocalFavorites(charactersListOb.value ?: listOf())
-        charactersListOb.value = updatedList
-        favoriteCharactersListOb.value = updatedList.filter { char -> char.isFavority }
+            interactor.updateLocalFavorites(
+                (charactersListOb.value ?: arrayListOf()) as ArrayList<CharacterModel>
+            )
+        if (updatedList.size > 0) {
+            charactersListOb.value = updatedList
+            favoriteCharactersListOb.value = updatedList.filter { char -> char.isFavority }
+        }else{
+            favoriteCharactersListOb.value = interactor.getFavorites()
+        }
     }
 
     fun loadMoreCharacters() {
