@@ -20,13 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/line_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_comics"
+                android:background="@color/black"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

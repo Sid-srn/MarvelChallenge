@@ -53,7 +53,7 @@ class CharacterDetailActivity : AppCompatActivity() {
                 adapter = comicsAdapter
             }
         } else {
-            binding.comicsRecyclerView.visibility = View.GONE
+            binding.comicsRecyclerView.visibility = View.INVISIBLE
             binding.emptyComicsCard.visibility = View.VISIBLE
         }
 
@@ -67,7 +67,7 @@ class CharacterDetailActivity : AppCompatActivity() {
                 adapter = seriesAdapter
             }
         } else {
-            binding.seriesRecyclerView.visibility = View.GONE
+            binding.seriesRecyclerView.visibility = View.INVISIBLE
             binding.emptySeriesCard.visibility = View.VISIBLE
         }
     }

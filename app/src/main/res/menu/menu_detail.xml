@@ -5,6 +5,6 @@
         android:id="@+id/favorite_chacter"
         android:icon="@drawable/ic_star"
         app:showAsAction="ifRoom|withText"
-        android:title="Profile">
+        android:title="@string/favorite">
     </item>
 </menu>

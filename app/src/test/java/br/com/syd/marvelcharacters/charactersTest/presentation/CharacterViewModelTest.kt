@@ -56,6 +56,29 @@ class CharacterViewModelTest {
     }
 
     @Test
+    fun `get character return exception`() = runBlocking {
+        val response = mockk<Exception>()
+        every {
+            runBlocking {
+                interactor.getCharacter(
+                    any()
+                )
+            }
+        } throws response
+        every {
+            runBlocking {
+                interactor.getFavorites()
+            }
+        } returns arrayListOf()
+        val viewModel = CharacterViewModel(interactor)
+
+        Assert.assertNull(viewModel.charactersListOb.value)
+        Assert.assertNotNull(viewModel.favoriteCharactersListOb.value)
+        Assert.assertNotNull(viewModel.characterExceptionOb.value)
+
+    }
+
+    @Test
     fun `save character return success`() {
         setupViewModel()
         val viewModel = CharacterViewModel(interactor)
