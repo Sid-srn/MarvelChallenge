@@ -17,8 +17,10 @@ class CharactersUiModelImpl(private val context: Context) : CharactersUiModel {
 
     override fun saveFavorite(favorite: FavoriteCharacterModel) {
         val favorites = getFavorite()
-        favorites.add(favorite)
-        SaveList(favorites)
+        if (!favorites.contains(favorite)) {
+            favorites.add(favorite)
+            SaveList(favorites)
+        }
         return
     }
 
